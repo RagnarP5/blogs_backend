@@ -120,6 +120,25 @@ describe('Deletion of a note', () => {
     })
 })
 
+describe('Updating a note', () => {
+    test('Can successfully update a blog', async () => {
+        const blogsAtStart = await helper.initialBlogsMany
+        const blogToUpdate = blogsAtStart[0]
+        blogToUpdate.likes = 666
+
+        const response = await api
+            .put(`/api/blogs/${blogToUpdate._id}`)
+            .send(blogToUpdate)
+            .expect(200)
+
+        // Check if blog has been updated
+        const response2 = await api.get(`/api/blogs/${blogToUpdate._id}`)
+
+        const returnedUpdatedBlog = JSON.parse(response2.text)
+        expect(returnedUpdatedBlog.likes).toEqual(666)
+    })
+})
+
 
 afterAll(async () => {
     await mongoose.connection.close()
