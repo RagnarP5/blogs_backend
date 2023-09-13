@@ -34,6 +34,7 @@ blogRouter.post('/', async (request, response) => {
     })
 
     const savedBlog = await blog.save()
+    await savedBlog.populate('user')
     response.status(201).json(savedBlog)
 })
 
